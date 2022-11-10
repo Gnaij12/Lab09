@@ -94,14 +94,23 @@ public class DrawView extends View { //Maybe have leaves falling from the trees 
                 }
             }
         }
+
+        for (int i = 0;i<leaves.size();i++) {
+            Leaf leaf = leaves.get(i);
+            boolean intersect = false;
+            for (int j = 0;j< leaves.size();j++) {
+                if (i != j && leaf.onTop(leaves.get(j))) {
+                    intersect = true;
+                    break;
+                }
+            }
+            leaf.update(intersect);
+            leaf.draw(canvas);
+        }
         tree4.drawTree(canvas);
         tree3.drawTree(canvas);
         tree2.drawTree(canvas);
         tree1.drawTree(canvas);
-        for (Leaf leaf:leaves) {
-            leaf.update();
-            leaf.draw(canvas);
-        }
         count++;
         invalidate();
     }

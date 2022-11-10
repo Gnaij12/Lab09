@@ -16,7 +16,7 @@ public class Leaf extends RectF {
     }
 
     public Leaf(float left, float top, float right, float bottom) {
-        this(left, top, right, bottom,1,2, Color.MAGENTA,-1);
+        this(left, top, right, bottom,0,5, Color.MAGENTA,-1);
     }
 
     public Leaf(int dx, int dy, int color) {
@@ -24,12 +24,17 @@ public class Leaf extends RectF {
     }
 
     public Leaf() {
-        this(2,3,Color.GREEN);
+        this(0,5,Color.GREEN);
     }
 
-    public void update() {
+    public void update(boolean intersect) {
+        if (intersect) {
+            dy = 0;
+        }
         if (centerY() + width()/2 + dy <=bottree) {
             offset(dx,dy);
+            dx = 0;
+            dy = 5;
         }
     }
 
@@ -37,6 +42,18 @@ public class Leaf extends RectF {
         Paint paint = new Paint();
         paint.setColor(color);
         canvas.drawCircle(centerX(),centerY(),width()/2,paint);
+    }
+    public boolean onTop(Leaf leaf) {
+        double dis = Math.sqrt(Math.pow(centerX()-leaf.centerX(),2) + Math.pow(centerY()-leaf.centerY(),2)*4);
+        if (centerY() < leaf.centerY() && (dis < Math.abs(width()/2 -leaf.width()/2) || dis < width()/2 + leaf.width()/2)) {
+            if (centerX() >= leaf.centerX()) {
+                dx = 3;
+            }else {
+                dx = -3;
+            }
+            return true;
+        }
+        return false;
     }
 
     public int getDx() {
